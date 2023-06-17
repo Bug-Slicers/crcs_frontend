@@ -10,6 +10,9 @@ import Charts from "./components/root/charts";
 import Amendments from "./components/root/amendments";
 import CRCS_MIS from "./components/root/crcs-mis/crcs-mis";
 import Reports from "./components/root/reports";
+import Admin from "./routes/admin";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +20,45 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        path: "",
+        element: <Home />,
+      },
+      {
+        path: "home",
+        element: <Home />,
+      },
+      {
+        path: "charts",
+        element: <Charts />,
+      },
+      {
+        path: "applications",
+        element: <Applications />,
+      },
+      {
+        path: "amendments",
+        element: <Amendments />,
+      },
+      {
+        path: "reports",
+        element: <Reports />,
+      },
+      {
+        path: "signup",
+        element: <CRCS_MIS />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "",
+        element: <Home />,
+      },
       {
         path: "home",
         element: <Home />,
@@ -48,5 +90,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <ToastContainer />
   </React.StrictMode>
 );

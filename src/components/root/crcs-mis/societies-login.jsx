@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { url } from "../../../assets/proxy";
+import { toast } from "react-toastify";
 
 const SocietiesLogin = () => {
   const [email, setEmail] = useState("");
@@ -6,7 +8,7 @@ const SocietiesLogin = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate the form fields
@@ -24,20 +26,28 @@ const SocietiesLogin = () => {
     // If there are no errors, proceed with login logic
     if (Object.keys(validationErrors).length === 0) {
       // Perform the login logic here
+      const payload = {
+        email,
+        password,
+      };
+      console.log(email, password);
+      const response = await fetch(url + "/societies/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+        credentials: "include",
+      });
 
-      // Set loading state to true
-      setIsLoading(true);
-
-      // Simulating asynchronous login request
-      setTimeout(() => {
-        // Simulating login success
-        console.log("Login successful");
-
-        // Reset form fields and loading state
-        setEmail("");
-        setPassword("");
-        setIsLoading(false);
-      }, 2000);
+      const data = await response.json();
+      console.log(data);
+      if (data.errors) {
+        setErrors(data.errors);
+      } else {
+        toast.success("Login successful!");
+      }
+      setIsLoading(false);
     }
   };
 
