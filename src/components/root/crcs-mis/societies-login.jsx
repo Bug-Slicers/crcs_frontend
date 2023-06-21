@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { url } from "../../../assets/proxy";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../store/userContext";
 
 const SocietiesLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const { userType, userData, updateUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,10 +46,15 @@ const SocietiesLogin = () => {
 
       const data = await response.json();
       console.log(data);
-      if (data.errors) {
+      console.log(response);
+      if (data.errors && !data.success) {
         setErrors(data.errors);
-      } else {
+      } else if (data.success) {
+        setEmail("");
+        setPassword("");
+        updateUser("society", data.society);
         toast.success("Login successful!");
+        navigate("/society");
       }
       setIsLoading(false);
     }

@@ -13,6 +13,15 @@ import Reports from "./components/root/reports";
 import Admin from "./routes/admin";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import RegisteredSocieties from "./components/admin/registered-societies";
+import SocietiesApplication from "./components/admin/societies-application";
+import Profile from "./components/admin/profile";
+import Society from "./routes/society";
+import SocietyApplications from "./components/society/society-applications";
+import SocietyProfile from "./components/society/society-profile";
+import CreateNewApplication from "./components/society/create-new-application";
+import { UserProvider } from "./store/userContext";
+import ViewApplication from "./components/society/view-application";
 
 const router = createBrowserRouter([
   {
@@ -57,31 +66,46 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Home />,
+        element: <RegisteredSocieties />,
       },
       {
-        path: "home",
-        element: <Home />,
-      },
-      {
-        path: "charts",
-        element: <Charts />,
+        path: "registered-societies",
+        element: <RegisteredSocieties />,
       },
       {
         path: "applications",
-        element: <Applications />,
+        element: <SocietiesApplication />,
       },
       {
-        path: "amendments",
-        element: <Amendments />,
+        path: "profile",
+        element: <Profile />,
+      },
+    ],
+  },
+  {
+    path: "/society",
+    element: <Society />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "",
+        element: <SocietyProfile />,
       },
       {
-        path: "reports",
-        element: <Reports />,
+        path: "applications",
+        element: <SocietyApplications />,
       },
       {
-        path: "signup",
-        element: <CRCS_MIS />,
+        path: "profile",
+        element: <SocietyProfile />,
+      },
+      {
+        path: "new-application",
+        element: <CreateNewApplication />,
+      },
+      {
+        path: "application/:applicationId",
+        element: <ViewApplication />,
       },
     ],
   },
@@ -89,7 +113,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-    <ToastContainer />
+    <UserProvider>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </UserProvider>
   </React.StrictMode>
 );

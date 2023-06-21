@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { url } from "../../../assets/proxy";
 import { toast } from "react-toastify";
+import { UserContext } from "../../../store/userContext";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const { userType, userData, updateUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,10 +48,14 @@ const AdminLogin = () => {
 
       const data = await response.json();
       console.log(data);
-      if (data.errors) {
+      if (data.errors && !data.success) {
         setErrors(data.errors);
-      } else {
+      } else if (data.success) {
+        setEmail("");
+        setPassword("");
+        updateUser("admin", data.admin);
         toast.success("Login successful!");
+        navigate("/admin");
       }
       setIsLoading(false);
     }
@@ -88,7 +96,9 @@ const AdminLogin = () => {
             }`}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            <p className="text-red-500 text-smuserContext mt-1">
+              {errors.password}
+            </p>
           )}
         </div>
         <button

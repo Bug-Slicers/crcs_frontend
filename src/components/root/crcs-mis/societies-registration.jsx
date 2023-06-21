@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { stateOptions } from "../../../assets/stateData";
 import { societyTypes } from "../../../assets/societyTypes";
 import { url } from "../../../assets/proxy";
-import { data } from "autoprefixer";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../store/userContext";
 
 const SocietiesRegistration = () => {
   const [societyName, setSocietyName] = useState("");
@@ -21,6 +22,9 @@ const SocietiesRegistration = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [societyLogo, setSocietyLogo] = useState(null);
+  const { userType, userData, updateUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const validateForm = () => {
     let errors = {};
@@ -88,6 +92,12 @@ const SocietiesRegistration = () => {
       errors.password = "Password must be at least 8 characters";
     }
 
+    // Validate Society Logo
+    if (!societyLogo) {
+      errors.soceityLogo = "Please add logo of society.";
+      isValid = false;
+    }
+
     // Validate confirm password
     if (password !== confirmPassword) {
       errors.confirmPassword = "Passwords do not match";
@@ -105,32 +115,32 @@ const SocietiesRegistration = () => {
       return;
     }
     setIsLoading(true);
+    const formData = new FormData();
+    formData.append("society_logo", societyLogo);
+    formData.append("society_name", societyName);
+    formData.append("address", address);
+    formData.append("pincode", pinCode);
+    formData.append("state", state);
+    formData.append("district", district);
+    formData.append("designation", designation);
+    formData.append("name_of_officer", nameOfOfficer);
+    formData.append("society_type", societyType);
+    formData.append("pan_number", panNumber);
+    formData.append("email", email);
+    formData.append("phone_number", phoneNumber);
+    formData.append("password", password);
 
     const response = await fetch(url + "/societies/signup", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         credentials: "include",
       },
-      body: JSON.stringify({
-        society_name: societyName,
-        address: address,
-        pincode: pinCode,
-        state: state,
-        district: district,
-        designation: designation,
-        name_of_officer: nameOfOfficer,
-        society_type: societyType,
-        pan_number: panNumber,
-        email: email,
-        phone_number: phoneNumber,
-        password: password,
-      }),
+      body: formData,
     });
 
     const data = await response.json();
     console.log(data);
-    if (data.errors) {
+    if (data.errors && !data.success) {
       let serverErrors = {};
       if (data.errors.email) {
         serverErrors.email = data.errors.email;
@@ -142,8 +152,10 @@ const SocietiesRegistration = () => {
         serverErrors.phoneNumber = data.errors.phone_number;
       }
       setErrors(serverErrors);
-    } else {
-      toast.success("Registration successful!");
+    } else if (!response.ok) {
+      toast.error("Something went wrong!!!");
+      setIsLoading(false);
+    } else if (data.success) {
       // Reset form state
       setSocietyName("");
       setAddress("");
@@ -160,6 +172,9 @@ const SocietiesRegistration = () => {
       setConfirmPassword("");
       setErrors({});
       setIsLoading(false);
+      updateUser("society", data.society);
+      toast.success("Registration successful!");
+      navigate("/society");
     }
 
     // Show success message or redirect to another page
@@ -189,6 +204,23 @@ const SocietiesRegistration = () => {
           />
           {errors.societyName && (
             <p className="text-red-500">{errors.societyName}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="block mb-1 font-bold" htmlFor="image">
+            Society Logo
+          </label>
+          <input
+            type="file"
+            id="societyLogo"
+            onChange={(e) => setSocietyLogo(e.target.files[0])}
+            className={`w-full px-3 py-2 border rounded-md ${
+              errors.societyLogo ? "border-red-500" : "border-gray-300"
+            }`}
+            required // Add 'required' attribute to make it a required field
+          />
+          {errors.societyLogo && (
+            <p className="text-red-500">{errors.societyLogo}</p>
           )}
         </div>
         <div className="mb-4">
