@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { url } from "../../../assets/proxy";
+import { toast } from "react-toastify";
+import { UserContext } from "../../../store/userContext";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const { userType, userData, updateUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate the form fields
@@ -24,20 +30,34 @@ const AdminLogin = () => {
     // If there are no errors, proceed with login logic
     if (Object.keys(validationErrors).length === 0) {
       // Perform the login logic here
+      const payload = {
+        email,
+        password,
+      };
 
       // Set loading state to true
       setIsLoading(true);
+      const response = await fetch(url + "/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+        credentials: "include",
+      });
 
-      // Simulating asynchronous login request
-      setTimeout(() => {
-        // Simulating login success
-        console.log("Login successful");
-
-        // Reset form fields and loading state
+      const data = await response.json();
+      console.log(data);
+      if (data.errors && !data.success) {
+        setErrors(data.errors);
+      } else if (data.success) {
         setEmail("");
         setPassword("");
-        setIsLoading(false);
-      }, 2000);
+        updateUser("admin", data.admin);
+        toast.success("Login successful!");
+        navigate("/admin");
+      }
+      setIsLoading(false);
     }
   };
 
@@ -76,7 +96,9 @@ const AdminLogin = () => {
             }`}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+            <p className="text-red-500 text-smuserContext mt-1">
+              {errors.password}
+            </p>
           )}
         </div>
         <button

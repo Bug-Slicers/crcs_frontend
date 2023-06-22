@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { url } from "../../assets/proxy";
 
-const Reports = () => {
+const RegisteredSocieties = () => {
   const [societies, setSocieties] = useState([]);
   const [filteredSocieties, setFilteredSocieties] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -162,4 +162,4 @@ const Reports = () => {
   );
 };
 
-export default Reports;
+export default RegisteredSocieties;

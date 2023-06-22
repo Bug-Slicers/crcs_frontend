@@ -25,7 +25,7 @@ export default function Navbar() {
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 <NavLink
-                  to={"/home"}
+                  to={"home"}
                   className={({ isActive, isPending }) =>
                     isActive
                       ? "text-dark_grey hover:text-white px-3 py-2 rounded-md text-sm font-medium underline"
@@ -38,8 +38,8 @@ export default function Navbar() {
                 >
                   Home
                 </NavLink>
-                <NavLink
-                  to={"/charts"}
+                {/* <NavLink
+                  to={"charts"}
                   className={({ isActive, isPending }) =>
                     isActive
                       ? "text-dark_grey hover:text-white px-3 py-2 rounded-md text-sm font-medium underline"
@@ -49,9 +49,9 @@ export default function Navbar() {
                   }
                 >
                   Charts
-                </NavLink>
+                </NavLink> */}
                 <NavLink
-                  to={"/applications"}
+                  to={"applications"}
                   className={({ isActive, isPending }) =>
                     isActive
                       ? "text-dark_grey hover:text-white px-3 py-2 rounded-md text-sm font-medium underline"
@@ -63,7 +63,7 @@ export default function Navbar() {
                   Applications
                 </NavLink>
                 <NavLink
-                  to={"/amendments"}
+                  to={"amendments"}
                   className={({ isActive, isPending }) =>
                     isActive
                       ? "text-dark_grey hover:text-white px-3 py-2 rounded-md text-sm font-medium underline"
@@ -75,7 +75,7 @@ export default function Navbar() {
                   Amendments
                 </NavLink>
                 <NavLink
-                  to={"/reports"}
+                  to={"reports"}
                   className={({ isActive, isPending }) =>
                     isActive
                       ? "text-dark_grey hover:text-white px-3 py-2 rounded-md text-sm font-medium underline"
@@ -87,7 +87,7 @@ export default function Navbar() {
                   Reports
                 </NavLink>
                 <NavLink
-                  to={"/signup"}
+                  to={"signup"}
                   title="Registration, Login, Admin"
                   className={({ isActive, isPending }) =>
                     isActive
@@ -136,7 +136,7 @@ export default function Navbar() {
       >
         <div className="px-2 pt-2 pb-3 sm:px-3">
           <NavLink
-            to={"/home"}
+            to={"home"}
             className={({ isActive, isPending }) =>
               isActive
                 ? "text-dark_grey hover:text-white block px-3 py-2 rounded-md text-base font-medium underline"
@@ -148,7 +148,7 @@ export default function Navbar() {
             Home
           </NavLink>
           <NavLink
-            to={"/charts"}
+            to={"charts"}
             className={({ isActive, isPending }) =>
               isActive
                 ? "text-dark_grey hover:text-white block px-3 py-2 rounded-md text-base font-medium underline"
@@ -160,7 +160,7 @@ export default function Navbar() {
             Charts
           </NavLink>
           <NavLink
-            to={"/applications"}
+            to={"applications"}
             className={({ isActive, isPending }) =>
               isActive
                 ? "text-dark_grey hover:text-white block px-3 py-2 rounded-md text-base font-medium underline"
@@ -172,7 +172,7 @@ export default function Navbar() {
             Applications
           </NavLink>
           <NavLink
-            to={"/amendments"}
+            to={"amendments"}
             className={({ isActive, isPending }) =>
               isActive
                 ? "text-dark_grey hover:text-white block px-3 py-2 rounded-md text-base font-medium underline"
@@ -184,7 +184,7 @@ export default function Navbar() {
             Amendments
           </NavLink>
           <NavLink
-            to={"/reports"}
+            to={"reports"}
             className={({ isActive, isPending }) =>
               isActive
                 ? "text-dark_grey hover:text-white block px-3 py-2 rounded-md text-base font-medium underline"
@@ -196,7 +196,7 @@ export default function Navbar() {
             Reports
           </NavLink>
           <NavLink
-            to={"/signup"}
+            to={"signup"}
             title="Registration, Login, Admin"
             className={({ isActive, isPending }) =>
               isActive

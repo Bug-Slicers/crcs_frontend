@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import React, { useState, useEffect } from "react";
 import { url } from "../../assets/proxy";
 
-const Amendments = () => {
+const SocietyApplications = () => {
   const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [applicationTypeFilter, setApplicationTypeFilter] = useState("");
@@ -17,21 +17,15 @@ const Amendments = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(url + "/applications/get-all-applications", {
+      const response = await fetch(url + "/societies/get-your-applications", {
         credentials: "include",
       });
-      if (!response.ok) {
-        toast.error("Something went wrong!!!, Please try again later.");
+      if (response.status === 401) {
+        toast.error("Please login to see this page.");
+        navigate("/signup");
       }
       const data = await response.json();
-      console.log(data);
-      setData(
-        data.data.filter(
-          (item) =>
-            item.application_type === "Amendments" ||
-            item.application_type === "Reconsideration of New Amendments"
-        )
-      );
+      setData(data.data);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -45,8 +39,7 @@ const Amendments = () => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
     const isMatch =
       item.application_title.toLowerCase().includes(lowerCaseSearchTerm) ||
-      item.application_desc.toLowerCase().includes(lowerCaseSearchTerm) ||
-      item.society_id.society_name.toLowerCase().includes(lowerCaseSearchTerm);
+      item.application_desc.toLowerCase().includes(lowerCaseSearchTerm);
     return isMatch;
   });
 
@@ -85,7 +78,7 @@ const Amendments = () => {
   return (
     <div className="font-poppins flex flex-col items-center justify-center px-6 md:px-0 mt-10 md:min-h-screen bg-gray-100">
       <div className="bg-white w-full max-w-screen-lg rounded-lg shadow-lg p-6 mt-4 sm:mt-0">
-        <h2 className="text-2xl font-bold mb-4">Society Amendments</h2>
+        <h2 className="text-2xl font-bold mb-4">Society Applications</h2>
         <div className="mb-4 flex items-center">
           <input
             type="text"
@@ -99,7 +92,14 @@ const Amendments = () => {
             value={applicationTypeFilter}
             onChange={handleApplicationTypeFilter}
           >
+            <option value="">All Applications</option>
+            <option value="New Registration">New Registration</option>
+            <option value="Re-Submission of New Registration">
+              Re-Submission of New Registration
+            </option>
+            <option value="Deemed">Deemed</option>
             <option value="Amendments">Amendments</option>
+            <option value="Conversion">Conversion</option>
             <option value="Reconsideration of New Amendments">
               Reconsideration of New Amendments
             </option>
@@ -124,7 +124,6 @@ const Amendments = () => {
               <table className="w-full border border-gray-300">
                 <thead>
                   <tr>
-                    <th className="border px-4 py-2">Society Name</th>
                     <th className="border px-4 py-2">Application Type</th>
                     <th className="border px-4 py-2">Application Title</th>
                     <th className="border px-4 py-2">
@@ -132,15 +131,13 @@ const Amendments = () => {
                     </th>
                     <th className="border px-4 py-2">Approved Status</th>
                     <th className="border px-4 py-2">Date of Application</th>
-                    <th className="border px-4 py-2">Certificate</th>
+                    <th className="border px-4 py-2">Date of Update</th>
+                    <th className="border px-4 py-2">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredDataWithFilters.map((item) => (
                     <tr key={item._id}>
-                      <td className="border px-4 py-2">
-                        {item.society_id.society_name}
-                      </td>
                       <td className="border px-4 py-2">
                         {item.application_type}
                       </td>
@@ -159,23 +156,14 @@ const Amendments = () => {
                         ).toLocaleDateString()}
                       </td>
                       <td className="border px-4 py-2">
-                        {item.certificate ? (
-                          <div>
-                            <a
-                              href={url + item.certificate}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={() =>
-                                handleViewDocument(item.certificate)
-                              }
-                              className="text-primary underline"
-                            >
-                              View Certificate
-                            </a>
-                          </div>
-                        ) : (
-                          <p>No certificate available.</p>
-                        )}
+                        {new Date(item.updatedAt).toLocaleDateString()}
+                      </td>
+                      <td className="border px-4 py-2">
+                        <Link to={"/society/application/" + item._id}>
+                          <button className="bg-blue-500 text-white py-2 px-4 rounded">
+                            Show More
+                          </button>
+                        </Link>
                       </td>
                     </tr>
                   ))}
@@ -189,4 +177,4 @@ const Amendments = () => {
   );
 };
 
-export default Amendments;
+export default SocietyApplications;
