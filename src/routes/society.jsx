@@ -1,12 +1,36 @@
 import React, { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import logoImage from "../assets/MSCS_LOGO.png";
+import { toast } from "react-toastify";
+import { url } from "../assets/proxy";
 
 const Society = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    try {
+      const response = await fetch(url + "/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("Logout Successfully");
+        navigate("/signup");
+      } else {
+        toast.error("Something went wrong error!!!");
+      }
+
+      // Perform any additional actions after logout if needed
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong!!!");
+    }
   };
 
   return (
@@ -90,7 +114,10 @@ const Society = () => {
 
         {/* Logout Button */}
         <div className="mt-auto mb-4 mx-4">
-          <button className="block w-full bg-primary hover:bg-secondary text-white py-2 px-4 rounded-lg">
+          <button
+            onClick={logout}
+            className="block w-full bg-primary hover:bg-secondary text-white py-2 px-4 rounded-lg"
+          >
             Logout
           </button>
         </div>

@@ -1,12 +1,36 @@
 import React, { useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import logoImage from "../assets/MSCS_LOGO.png";
+import { url } from "../assets/proxy";
+import { toast } from "react-toastify";
 
 const Admin = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const navigate = useNavigate();
+  const logout = async () => {
+    try {
+      const response = await fetch(url + "/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("Logout Successfully");
+        navigate("/signup");
+      } else {
+        toast.error("Something went wrong error!!!");
+      }
+
+      // Perform any additional actions after logout if needed
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong!!!");
+    }
   };
 
   return (
@@ -46,7 +70,7 @@ const Admin = () => {
         {/* Nav Links */}
         <nav className="py-4">
           <ul className="space-y-2">
-            <li>
+            {/* <li>
               <NavLink
                 to="profile"
                 className={({ isActive }) =>
@@ -58,7 +82,7 @@ const Admin = () => {
               >
                 Profile
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink
                 to="registered-societies"
@@ -90,7 +114,10 @@ const Admin = () => {
 
         {/* Logout Button */}
         <div className="mt-auto mb-4 mx-4">
-          <button className="block w-full bg-primary hover:bg-secondary text-white py-2 px-4 rounded-lg">
+          <button
+            onClick={logout}
+            className="block w-full bg-primary hover:bg-secondary text-white py-2 px-4 rounded-lg"
+          >
             Logout
           </button>
         </div>
@@ -125,7 +152,9 @@ const Admin = () => {
         </div>
 
         {/* Your page content goes here */}
-        <Outlet />
+        <div className="h-screen overflow-scroll">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

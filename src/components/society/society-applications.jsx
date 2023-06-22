@@ -97,6 +97,12 @@ const SocietyApplications = () => {
             <option value="Re-Submission of New Registration">
               Re-Submission of New Registration
             </option>
+            <option value="Deemed">Deemed</option>
+            <option value="Amendments">Amendments</option>
+            <option value="Conversion">Conversion</option>
+            <option value="Reconsideration of New Amendments">
+              Reconsideration of New Amendments
+            </option>
           </select>
           <select
             className="ml-2 bg-white border border-gray-300 rounded-md py-2 px-4"

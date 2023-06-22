@@ -14,7 +14,6 @@ import Admin from "./routes/admin";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RegisteredSocieties from "./components/admin/registered-societies";
-import SocietiesApplication from "./components/admin/societies-application";
 import Profile from "./components/admin/profile";
 import Society from "./routes/society";
 import SocietyApplications from "./components/society/society-applications";
@@ -22,6 +21,8 @@ import SocietyProfile from "./components/society/society-profile";
 import CreateNewApplication from "./components/society/create-new-application";
 import { UserProvider } from "./store/userContext";
 import ViewApplication from "./components/society/view-application";
+import SocietiesApplications from "./components/admin/societies-applications";
+import SocietiyApplicationDetails from "./components/admin/society-application-details";
 
 const router = createBrowserRouter([
   {
@@ -74,7 +75,11 @@ const router = createBrowserRouter([
       },
       {
         path: "applications",
-        element: <SocietiesApplication />,
+        element: <SocietiesApplications />,
+      },
+      {
+        path: "application/:applicationId",
+        element: <SocietiyApplicationDetails />,
       },
       {
         path: "profile",

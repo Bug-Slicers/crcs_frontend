@@ -38,7 +38,7 @@ export default function Navbar() {
                 >
                   Home
                 </NavLink>
-                <NavLink
+                {/* <NavLink
                   to={"charts"}
                   className={({ isActive, isPending }) =>
                     isActive
@@ -49,7 +49,7 @@ export default function Navbar() {
                   }
                 >
                   Charts
-                </NavLink>
+                </NavLink> */}
                 <NavLink
                   to={"applications"}
                   className={({ isActive, isPending }) =>
